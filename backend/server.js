@@ -11,8 +11,12 @@ connectDB();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// 👇 YEH LINE CHANGE KI - CORS FIX
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Import routes
