@@ -3,16 +3,22 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// Transporter with TLS configuration for Render
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false // Important for Render deployment
     }
 });
 
 export const sendReportEmail = async (toEmail, reportTitle, reportData) => {
     try {
+        console.log('📧 Sending email to:', toEmail);
+        
         // Convert base64 to buffer for attachment
         let attachment = null;
         if (reportData.fileUrl && reportData.fileUrl.startsWith('data:')) {
