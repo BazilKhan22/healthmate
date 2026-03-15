@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { sendReportEmail } from '../services/emailService.js';
 
 // Timeline Chart Component
 const TimelineChart = ({ data }) => {
@@ -270,34 +271,32 @@ const Reports = () => {
     setShareModal(true);
   };
 
-  const handleShare = async () => {
-    if (!shareEmail) {
-      alert('Please enter an email address');
-      return;
-    }
+ const handleShare = async () => {
+  if (!shareEmail) {
+    alert('Please enter an email address');
+    return;
+  }
+  
+  setUploading(true);
+  setError('');
+  setSuccess('');
+  
+  try {
+    // Call EmailJS instead of backend
+    await sendReportEmail(shareEmail, selectedReport.title, selectedReport);
     
-    setUploading(true);
-    setError('');
-    setSuccess('');
-    
-    try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/reports/share`, {
-        email: shareEmail,
-        reportId: selectedReport._id
-      });
-      
-      setSuccess(`✅ Report shared successfully with ${shareEmail}`);
-      setShareModal(false);
-      setShareEmail('');
-      setSelectedReport(null);
-      setTimeout(() => setSuccess(''), 5000);
-    } catch (error) {
-      console.error('Share error:', error);
-      setError(error.response?.data?.message || 'Failed to share report');
-      setTimeout(() => setError(''), 5000);
-    }
-    setUploading(false);
-  };
+    setSuccess(`✅ Report shared successfully with ${shareEmail}`);
+    setShareModal(false);
+    setShareEmail('');
+    setSelectedReport(null);
+    setTimeout(() => setSuccess(''), 5000);
+  } catch (error) {
+    console.error('Share error:', error);
+    setError(error.message || 'Failed to share report');
+    setTimeout(() => setError(''), 5000);
+  }
+  setUploading(false);
+};
 
   const compareReports = () => {
   if (reports.length < 2) {
