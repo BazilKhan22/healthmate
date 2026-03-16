@@ -8,15 +8,18 @@ const EMAILJS_TEMPLATE_ID = "template_3qohydl";
 // Initialize EmailJS
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
-export const sendReportEmail = async (toEmail, reportTitle, reportData) => {
+export const sendReportEmail = async (toEmail, reportTitle, reportData, reportLink) => {
     try {
         console.log('📧 Sending email via EmailJS...');
+        console.log('To:', toEmail);
+        console.log('Report:', reportTitle);
+        console.log('Link:', reportLink);
         
         const templateParams = {
             to_email: toEmail,
             report_title: reportTitle,
             report_summary: reportData.aiSummary?.english || 'No summary available',
-            report_link: window.location.origin + '/reports',
+            report_link: reportLink,
             report_date: new Date(reportData.reportDate).toLocaleDateString(),
             user_name: reportData.user?.name || 'HealthMate User'
         };

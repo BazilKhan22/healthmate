@@ -271,7 +271,7 @@ const Reports = () => {
     setShareModal(true);
   };
 
- const handleShare = async () => {
+const handleShare = async () => {
   if (!shareEmail) {
     alert('Please enter an email address');
     return;
@@ -282,8 +282,15 @@ const Reports = () => {
   setSuccess('');
   
   try {
-    // Call EmailJS instead of backend
-    await sendReportEmail(shareEmail, selectedReport.title, selectedReport);
+    // Report detail page ka link bhejo
+    const reportLink = window.location.origin + `/report/${selectedReport._id}`;
+    
+    await sendReportEmail(
+      shareEmail, 
+      selectedReport.title, 
+      selectedReport,
+      reportLink  // 👈 YEH NAYA PARAMETER
+    );
     
     setSuccess(`✅ Report shared successfully with ${shareEmail}`);
     setShareModal(false);

@@ -12,6 +12,7 @@ import ProgressReport from './components/ProgressReport.js';
 import ReportComparison from './components/ReportComparison.js';
 import Settings from './components/Settings.js';
 import HealthBlog from './components/HealthBlog.js'; 
+import ReportDetail from './components/ReportDetail.js';
 import AIChatbot from './components/AIChatbot.js';
 import './App.css';
 
@@ -36,86 +37,28 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
+            {/* Public Routes - No login required */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/reports" 
-              element={
-                <ProtectedRoute>
-                  <Reports />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/vitals" 
-              element={
-                <ProtectedRoute>
-                  <Vitals />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/health-tips" 
-              element={
-                <ProtectedRoute>
-                  <HealthTips />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/reminders" 
-              element={
-                <ProtectedRoute>
-                  <Reminders />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/progress-report" 
-              element={
-                <ProtectedRoute>
-                  <ProgressReport />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/report-comparison" 
-              element={
-                <ProtectedRoute>
-                  <ReportComparison />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/settings" 
-              element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              } 
-            />
-            {/* 👇 YEH ROUTE ADD KARO - BLOG PAGE */}
-            <Route 
-              path="/health-blog" 
-              element={
-                <ProtectedRoute>
-                  <HealthBlog />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/report/:id" element={<ReportDetail />} />
+            
+            {/* Protected Routes - Login required */}
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+            <Route path="/vitals" element={<ProtectedRoute><Vitals /></ProtectedRoute>} />
+            <Route path="/health-tips" element={<ProtectedRoute><HealthTips /></ProtectedRoute>} />
+            <Route path="/reminders" element={<ProtectedRoute><Reminders /></ProtectedRoute>} />
+            <Route path="/progress-report" element={<ProtectedRoute><ProgressReport /></ProtectedRoute>} />
+            <Route path="/report-comparison" element={<ProtectedRoute><ReportComparison /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/health-blog" element={<ProtectedRoute><HealthBlog /></ProtectedRoute>} />
+            
+            {/* Default redirect */}
             <Route path="/" element={<Navigate to="/dashboard" />} />
           </Routes>
 
+          {/* AI Chatbot - Shows on all pages */}
           <AIChatbot />
-
         </div>
       </Router>
     </AuthProvider>
