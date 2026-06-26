@@ -137,32 +137,28 @@ const uploadReport = async (req, res) => {
         console.log('Upload request received:', { title, reportDate, reportType });
         console.log('File received:', req.file ? 'Yes' : 'No');
 
-        // Validate required fields
         if (!title) {
             return res.status(400).json({ message: 'Report title is required' });
         }
 
-        // Handle file upload or URL
         let fileUrl = '';
         let fileType = 'image';
         let fileName = '';
 
         if (req.file) {
-            // Convert file to base64 for storage
             fileUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-            fileType = req.file.mimetype.split('/')[1];
+            fileType = req.file.mimetype.split('/')[1] || 'image';
             fileName = req.file.originalname;
+            console.log('File type detected:', fileType);
+            console.log('File size:', req.file.size);
         } else if (req.body.fileUrl) {
-            // Use provided URL
             fileUrl = req.body.fileUrl;
         } else {
             return res.status(400).json({ message: 'Please provide a file or file URL' });
         }
 
-        // Get AI analysis based on report type
         const analysis = getAIAnalysisForReportType(reportType || 'other');
 
-        // Create report in database
         const report = await Report.create({
             user: req.user._id,
             title,
@@ -208,11 +204,9 @@ const updateReport = async (req, res) => {
             return res.status(404).json({ message: 'Report not found' });
         }
 
-        // Update report fields
         if (title) report.title = title;
         if (reportDate) report.reportDate = reportDate;
         
-        // If report type changed, update AI analysis
         if (reportType && reportType !== report.reportType) {
             report.reportType = reportType;
             const analysis = getAIAnalysisForReportType(reportType);
@@ -252,7 +246,7 @@ const getReports = async (req, res) => {
     }
 };
 
-// Get single report
+// Get single report (protected)
 const getReportById = async (req, res) => {
     try {
         const report = await Report.findOne({ 
@@ -267,6 +261,22 @@ const getReportById = async (req, res) => {
         res.json(report);
     } catch (error) {
         console.error('Get report error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get public report (no auth required)
+const getPublicReport = async (req, res) => {
+    try {
+        const report = await Report.findById(req.params.id);
+        
+        if (!report) {
+            return res.status(404).json({ message: 'Report not found' });
+        }
+        
+        res.json(report);
+    } catch (error) {
+        console.error('Get public report error:', error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -310,7 +320,6 @@ const shareReport = async (req, res) => {
             return res.status(404).json({ message: 'Report not found' });
         }
 
-        // Send email
         await sendReportEmail(email, report.title, report);
 
         res.json({ 
@@ -330,5 +339,6 @@ export {
     getReportById, 
     deleteReport, 
     updateReport, 
-    shareReport 
+    shareReport,
+    getPublicReport
 };
