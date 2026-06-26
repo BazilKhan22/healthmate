@@ -13,7 +13,7 @@ import multer from 'multer';
 
 const router = express.Router();
 
-// Configure multer for file upload - ALLOW ALL IMAGES AND PDFS
+// 🔥 IMPROVED MULTER CONFIGURATION
 const storage = multer.memoryStorage();
 const upload = multer({ 
     storage: storage,
@@ -21,11 +21,17 @@ const upload = multer({
         fileSize: 10 * 1024 * 1024 // 10MB limit
     },
     fileFilter: (req, file, cb) => {
-        // ALLOW images (jpg, jpeg, png, gif, webp) AND PDFs
-        if (file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf') {
+        console.log('📁 File type received:', file.mimetype);
+        
+        // ✅ Allow all images (jpg, jpeg, png, gif, webp, svg) AND PDFs
+        if (file.mimetype.startsWith('image/')) {
             cb(null, true);
-        } else {
-            cb(new Error('Only images (JPG, PNG) and PDF files are allowed!'), false);
+        } 
+        else if (file.mimetype === 'application/pdf') {
+            cb(null, true);
+        }
+        else {
+            cb(new Error(`File type not allowed: ${file.mimetype}`), false);
         }
     }
 });
