@@ -43,48 +43,59 @@ const TimelineChart = ({ data }) => {
 
 // PDF Preview Component
 const PDFPreview = ({ fileUrl }) => {
-  const [showPreview, setShowPreview] = useState(false);
-  
-  if (!fileUrl) return null;
-  
-  return (
-    <>
-      <button
-        onClick={() => setShowPreview(true)}
-        style={{
-          background: 'none',
-          border: '1px solid #e2e8f0',
-          padding: '6px 12px',
-          borderRadius: '6px',
-          cursor: 'pointer',
-          fontSize: '12px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '5px'
-        }}
-      >
-        📄 Preview
-      </button>
-      
-      {showPreview && (
-        <div className="modal-overlay" onClick={() => setShowPreview(false)}>
-          <div className="modal" style={{ maxWidth: '800px' }} onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2 className="modal-title">Report Preview</h2>
-              <button className="modal-close" onClick={() => setShowPreview(false)}>×</button>
-            </div>
-            <div className="modal-body">
-              {fileUrl.includes('pdf') ? (
-                <embed src={fileUrl} type="application/pdf" width="100%" height="500px" />
-              ) : (
-                <img src={fileUrl} alt="Report" style={{ maxWidth: '100%', maxHeight: '500px' }} />
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
+    const [showPreview, setShowPreview] = useState(false);
+    
+    if (!fileUrl) return null;
+    
+    // Check file type
+    const isPDF = fileUrl.includes('.pdf') || fileUrl.includes('application/pdf') || fileUrl.includes('data:application/pdf');
+    const isImage = fileUrl.startsWith('data:image') || fileUrl.includes('.jpg') || fileUrl.includes('.jpeg') || fileUrl.includes('.png');
+    
+    return (
+        <>
+            <button
+                onClick={() => setShowPreview(true)}
+                style={{
+                    background: 'none',
+                    border: '1px solid #e2e8f0',
+                    padding: '6px 12px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '12px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '5px'
+                }}
+            >
+                {isPDF ? '📄 View PDF' : '🖼️ View Image'}
+            </button>
+            
+            {showPreview && (
+                <div className="modal-overlay" onClick={() => setShowPreview(false)}>
+                    <div className="modal" style={{ maxWidth: '900px', maxHeight: '90vh' }} onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="modal-title">Document Preview</h2>
+                            <button className="modal-close" onClick={() => setShowPreview(false)}>×</button>
+                        </div>
+                        <div className="modal-body" style={{ overflow: 'auto', maxHeight: '75vh', padding: '20px' }}>
+                            {isPDF ? (
+                                // PDF - use iframe for better compatibility
+                                <iframe 
+                                    src={fileUrl} 
+                                    title="PDF Preview"
+                                    style={{ width: '100%', height: '600px', border: 'none' }}
+                                />
+                            ) : isImage ? (
+                                <img src={fileUrl} alt="Report" style={{ maxWidth: '100%', maxHeight: '600px', display: 'block', margin: '0 auto' }} />
+                            ) : (
+                                <p style={{ textAlign: 'center', color: '#64748b' }}>Preview not available for this file type</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
 };
 
 const Reports = () => {
@@ -127,14 +138,38 @@ const Reports = () => {
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        setError('File too large! Max 10MB');
-        return;
-      }
-      setSelectedFile(file);
-      setError('');
+        // Check file size (10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            setError('File too large! Max 10MB');
+            return;
+        }
+        
+        // Check file type - ALLOW ALL IMAGES AND PDFS
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
+        if (!allowedTypes.includes(file.type)) {
+            setError('Only JPG, PNG, and PDF files are allowed!');
+            return;
+        }
+        
+        setSelectedFile(file);
+        setError('');
+        
+        // Create preview URL for images
+        if (file.type.startsWith('image/')) {
+            const previewUrl = URL.createObjectURL(file);
+            setFormData(prev => ({
+                ...prev,
+                fileUrl: previewUrl
+            }));
+        } else {
+            // For PDF, show placeholder
+            setFormData(prev => ({
+                ...prev,
+                fileUrl: 'https://via.placeholder.com/300x400/2563eb/ffffff?text=PDF+Document'
+            }));
+        }
     }
-  };
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
