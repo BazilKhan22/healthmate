@@ -135,7 +135,7 @@ const Reports = () => {
     setLoading(false);
   };
 
-  const handleFileSelect = (e) => {
+const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
         // Check file size (10MB)
@@ -144,10 +144,14 @@ const Reports = () => {
             return;
         }
         
-        // Check file type - ALLOW ALL IMAGES AND PDFS
-        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
-        if (!allowedTypes.includes(file.type)) {
-            setError('Only JPG, PNG, and PDF files are allowed!');
+        console.log('📁 Selected file:', file.type, file.name);
+        
+        // ✅ Improved file type detection
+        const isImage = file.type.startsWith('image/');
+        const isPDF = file.type === 'application/pdf';
+        
+        if (!isImage && !isPDF) {
+            setError('Only images (JPG, PNG) and PDF files are allowed!');
             return;
         }
         
@@ -155,7 +159,7 @@ const Reports = () => {
         setError('');
         
         // Create preview URL for images
-        if (file.type.startsWith('image/')) {
+        if (isImage) {
             const previewUrl = URL.createObjectURL(file);
             setFormData(prev => ({
                 ...prev,
