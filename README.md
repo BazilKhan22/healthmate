@@ -1,4 +1,4 @@
-# 🏥 HealthMate - Frontend
+# 🏥 HealthMate
 
 HealthMate is a comprehensive MERN stack health management application that helps users track medical reports, vitals, and get AI-powered health insights.
 
