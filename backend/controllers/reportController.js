@@ -186,7 +186,11 @@ const uploadReport = async (req, res) => {
         });
     } catch (error) {
         console.error('Upload error:', error);
-        res.status(500).json({ message: error.message });
+       res.status(500).json({ 
+    message: error.message,
+    stack: error.stack,
+    name: error.name
+});
     }
 };
 
