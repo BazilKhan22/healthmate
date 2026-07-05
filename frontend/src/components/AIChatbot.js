@@ -20,118 +20,124 @@ const AIChatbot = () => {
   setInput('');
   setLoading(true);
 
-  // Simulate AI thinking
   setTimeout(() => {
     const lowerInput = input.toLowerCase();
     let response = "";
 
-    // Better pattern matching for sugar related queries
+    // Sugar / Diabetes
     if (lowerInput.includes('sugar') || lowerInput.includes('diabetes') || lowerInput.includes('glucose')) {
-      
-      // Extract number from the message
       const numberMatch = input.match(/\d+/);
       const sugarValue = numberMatch ? parseInt(numberMatch[0]) : null;
-
       if (sugarValue) {
         if (sugarValue > 300) {
-          response = `⚠️ Your sugar level of ${sugarValue} is VERY HIGH and requires immediate attention!
-
-🔴 **URGENT:**
-• Contact your doctor immediately
-• If you can't reach your doctor, go to the emergency room
-• Do NOT exercise as it can make it worse
-• Drink water to stay hydrated
-• Check for ketones if you have a meter
-
-📞 This is a medical emergency. Please seek professional help right away.`;
-        } 
-        else if (sugarValue > 180) {
-          response = `Your sugar level of ${sugarValue} is high (hyperglycemia).
-
-✅ **What to do:**
-• Take your medication as prescribed
-• Drink plenty of water
-• Go for a light walk if you feel able
-• Avoid sugary foods and drinks
-• Monitor your sugar again in 2-4 hours
-
-📞 Contact your doctor if levels don't come down.`;
-        }
-        else if (sugarValue < 70) {
-          response = `Your sugar level of ${sugarValue} is low (hypoglycemia).
-
-✅ **Immediate steps:**
-• Eat 15g fast-acting carbs (4 glucose tablets, 1/2 cup juice, 1 tbsp honey)
-• Wait 15 minutes and recheck
-• If still low, repeat
-• Once normal, eat a small snack
-
-📞 Seek help if you can't swallow or feel confused.`;
-        }
-        else {
-          response = `Your sugar level of ${sugarValue} is within a good range (70-180 mg/dL).
-
-✅ **Keep it up:**
-• Continue your regular medication
-• Maintain balanced meals
-• Stay active
-• Monitor regularly
-
-💪 Great job managing your health!`;
+          response = `⚠️ Your sugar level of ${sugarValue} is VERY HIGH!\n\n🔴 URGENT:\n• Contact your doctor immediately\n• Go to emergency if needed\n• Do NOT exercise\n• Drink water\n• Check for ketones`;
+        } else if (sugarValue > 180) {
+          response = `Your sugar level of ${sugarValue} is high.\n\n✅ What to do:\n• Take medication as prescribed\n• Drink plenty of water\n• Light walk if able\n• Avoid sugary foods\n• Recheck in 2-4 hours`;
+        } else if (sugarValue < 70) {
+          response = `Your sugar level of ${sugarValue} is LOW!\n\n✅ Immediate steps:\n• Eat 15g fast carbs (juice, glucose tablets, honey)\n• Wait 15 minutes, recheck\n• Eat a small snack after recovery\n• Seek help if confused`;
+        } else {
+          response = `Your sugar level of ${sugarValue} is normal (70-180 mg/dL). ✅\n\n💪 Keep it up:\n• Continue medication\n• Balanced meals\n• Stay active`;
         }
       } else {
-        response = "For blood sugar management:\n\n✅ **General tips:**\n• Monitor regularly\n• Take medications on time\n• Eat balanced meals\n• Stay hydrated\n• Exercise regularly\n\n📊 Normal range: 70-180 mg/dL\n\n⚠️ If your sugar is very high (>300) or very low (<70), seek immediate medical help.";
+        response = "For blood sugar:\n\n📊 Normal range: 70-180 mg/dL\n• Monitor regularly\n• Take medications on time\n• Eat balanced meals\n\nShare your reading for specific advice e.g. 'my sugar is 250'";
       }
     }
-    else if (lowerInput.includes('bp') || lowerInput.includes('blood pressure')) {
+
+    // Blood Pressure
+    else if (lowerInput.includes('bp') || lowerInput.includes('blood pressure') || lowerInput.includes('hypertension')) {
       const numberMatch = input.match(/\d+/g);
       if (numberMatch && numberMatch.length >= 2) {
         const systolic = parseInt(numberMatch[0]);
         const diastolic = parseInt(numberMatch[1]);
-        
         if (systolic > 180 || diastolic > 120) {
-          response = `⚠️ Your BP of ${systolic}/${diastolic} is VERY HIGH - This is a hypertensive crisis!
-
-🚨 **EMERGENCY - CALL 911 NOW!**
-• Chest pain
-• Shortness of breath
-• Severe headache
-• Vision changes
-
-📞 **IMMEDIATE MEDICAL ATTENTION REQUIRED**`;
-        }
-        else if (systolic > 140 || diastolic > 90) {
-          response = `Your BP of ${systolic}/${diastolic} is high (Stage 2 hypertension).
-
-✅ **What to do:**
-• Contact your doctor
-• Take medications as prescribed
-• Reduce salt intake
-• Manage stress
-• Avoid caffeine/alcohol
-
-📞 Schedule a doctor's appointment soon.`;
-        }
-        else {
-          response = `Your BP of ${systolic}/${diastolic} is good! Keep maintaining healthy habits.`;
+          response = `⚠️ BP ${systolic}/${diastolic} is DANGEROUSLY HIGH!\n\n🚨 EMERGENCY:\n• Call doctor immediately\n• Watch for chest pain, headache, vision changes\n• Do not exercise\n• Rest immediately`;
+        } else if (systolic > 140 || diastolic > 90) {
+          response = `BP ${systolic}/${diastolic} is high (Stage 2).\n\n✅ What to do:\n• Contact your doctor\n• Take medications as prescribed\n• Reduce salt intake\n• Manage stress\n• Avoid caffeine`;
+        } else if (systolic > 120 || diastolic > 80) {
+          response = `BP ${systolic}/${diastolic} is slightly elevated (Stage 1).\n\n✅ Tips:\n• Reduce salt and processed food\n• Exercise regularly\n• Manage stress\n• Monitor daily`;
+        } else {
+          response = `BP ${systolic}/${diastolic} is normal! ✅\n\n💪 Keep maintaining:\n• Healthy diet\n• Regular exercise\n• Less salt\n• Good sleep`;
         }
       } else {
-        response = "Normal blood pressure is below 120/80 mmHg. For accurate advice, please share your readings (e.g., 'my BP is 140/90').";
+        response = "Normal BP is below 120/80 mmHg.\n\nShare your reading for specific advice e.g. 'my BP is 140/90'";
       }
     }
-    else if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('hey')) {
-      response = "Hello! 👋 I'm your HealthMate AI assistant. How can I help you today?\n\nYou can ask me about:\n• Blood sugar levels\n• Blood pressure\n• Diet & nutrition\n• Exercise\n• Symptoms\n• Medications";
-    }
-    else {
-      response = "I understand you're asking about health. To give you the best advice, please tell me:\n\n• What specific health concern do you have?\n• What are your readings (if any)?\n• Are you on any medications?\n\nFor example: 'My sugar is 323, what should I do?'";
+
+    // Fever
+    else if (lowerInput.includes('fever') || lowerInput.includes('bukhar') || lowerInput.includes('temperature')) {
+      const numberMatch = input.match(/\d+(\.\d+)?/);
+      const temp = numberMatch ? parseFloat(numberMatch[0]) : null;
+      if (temp) {
+        if (temp >= 104) {
+          response = `⚠️ Temperature ${temp}°F is VERY HIGH!\n\n🚨 Go to emergency immediately!\n• This can cause seizures\n• Apply cold compress\n• Do not give aspirin to children`;
+        } else if (temp >= 102) {
+          response = `Temperature ${temp}°F is high fever.\n\n✅ What to do:\n• Take paracetamol/ibuprofen\n• Stay hydrated\n• Rest completely\n• Cool compress on forehead\n• See doctor if fever persists >2 days`;
+        } else if (temp >= 99) {
+          response = `Temperature ${temp}°F is mild fever.\n\n✅ Tips:\n• Rest and hydrate\n• Light clothing\n• Paracetamol if uncomfortable\n• Monitor every 4 hours`;
+        } else {
+          response = `Temperature ${temp}°F is normal. ✅\n\nNormal range: 97-99°F (36-37.2°C)`;
+        }
+      } else {
+        response = "For fever management:\n\n🌡️ Normal: 97-99°F\n• Mild fever: 99-102°F → Rest, hydrate, paracetamol\n• High fever: 102-104°F → See doctor\n• Very high: 104°F+ → Emergency!\n\nShare your temperature for specific advice.";
+      }
     }
 
-    const aiMessage = { 
-      text: response + "\n\n⚠️ This is AI-generated health information. For medical emergencies, please seek immediate professional help.", 
-      sender: 'ai', 
-      timestamp: new Date() 
+    // Headache
+    else if (lowerInput.includes('headache') || lowerInput.includes('sir dard') || lowerInput.includes('head pain') || lowerInput.includes('migraine')) {
+      response = `For headache/migraine:\n\n✅ Immediate relief:\n• Rest in a dark, quiet room\n• Apply cold or warm compress\n• Stay hydrated — dehydration causes headaches\n• Take paracetamol if needed\n• Gentle neck stretches\n\n⚠️ See doctor if:\n• Sudden severe headache\n• Headache with fever and stiff neck\n• Vision changes\n• Headache after head injury\n• Persistent headaches daily`;
+    }
+
+    // Feeling tired / fatigue
+    else if (lowerInput.includes('tired') || lowerInput.includes('fatigue') || lowerInput.includes('exhausted') || lowerInput.includes('weakness') || lowerInput.includes('kamzori') || lowerInput.includes('feeling low')) {
+      response = `For fatigue and weakness:\n\n✅ Common causes:\n• Poor sleep (aim 7-8 hours)\n• Dehydration\n• Iron deficiency / anemia\n• Low vitamin D or B12\n• Stress or anxiety\n\n💊 Tips:\n• Drink 8-10 glasses of water daily\n• Eat iron-rich foods (spinach, meat, lentils)\n• Take vitamin supplements if needed\n• Light exercise boosts energy\n• Avoid excessive caffeine\n\n📞 See doctor if fatigue persists >2 weeks — could indicate thyroid, anemia, or diabetes.`;
+    }
+
+    // Cough
+    else if (lowerInput.includes('cough') || lowerInput.includes('khansi') || lowerInput.includes('khasi')) {
+      response = `For cough:\n\n✅ Home remedies:\n• Honey + warm water or ginger tea\n• Steam inhalation 2x daily\n• Stay hydrated\n• Avoid cold drinks and dust\n• Salt water gargle\n\n⚠️ See doctor if:\n• Cough with blood\n• Cough >3 weeks\n• High fever with cough\n• Difficulty breathing\n• Chest pain while coughing`;
+    }
+
+    // Sneezing / Cold
+    else if (lowerInput.includes('sneezing') || lowerInput.includes('cold') || lowerInput.includes('runny nose') || lowerInput.includes('zukam') || lowerInput.includes('nasal')) {
+      response = `For cold and sneezing:\n\n✅ Relief tips:\n• Steam inhalation\n• Warm soups and fluids\n• Honey + ginger + lemon tea\n• Rest well\n• Saline nasal drops\n• Vitamin C fruits (oranges, lemon)\n\n💊 Medications:\n• Antihistamines for sneezing\n• Decongestants for blocked nose\n\n⚠️ See doctor if symptoms >10 days or high fever develops.`;
+    }
+
+    // Heart disease / chest pain
+    else if (lowerInput.includes('heart') || lowerInput.includes('chest pain') || lowerInput.includes('chest tightness') || lowerInput.includes('heart attack') || lowerInput.includes('cardiac') || lowerInput.includes('palpitation')) {
+      response = `⚠️ HEART SYMPTOMS — Take seriously!\n\n🚨 Call emergency immediately if:\n• Chest pain or pressure\n• Pain spreading to arm, jaw, back\n• Shortness of breath\n• Sweating with chest discomfort\n• Irregular heartbeat\n\n✅ For mild palpitations:\n• Sit down and rest\n• Breathe slowly and deeply\n• Drink water\n• Avoid caffeine and stress\n\n📞 Always consult a cardiologist for any heart-related symptoms. Do not ignore!`;
+    }
+
+    // Diet / nutrition
+    else if (lowerInput.includes('diet') || lowerInput.includes('food') || lowerInput.includes('nutrition') || lowerInput.includes('weight') || lowerInput.includes('khana')) {
+      response = `Healthy diet tips:\n\n✅ Eat more:\n• Fresh fruits and vegetables\n• Whole grains (brown rice, oats)\n• Lean proteins (chicken, fish, lentils)\n• Nuts and seeds\n• Plenty of water\n\n🚫 Avoid:\n• Processed and fried foods\n• Sugary drinks\n• Excessive salt\n• Trans fats\n\n💡 Tip: Eat smaller portions 5x a day instead of 3 large meals.`;
+    }
+
+    // Exercise
+    else if (lowerInput.includes('exercise') || lowerInput.includes('workout') || lowerInput.includes('walk') || lowerInput.includes('gym') || lowerInput.includes('physical activity')) {
+      response = `Exercise recommendations:\n\n✅ For general health:\n• 30 minutes walking daily\n• Stretching morning and evening\n• Swimming or cycling 3x/week\n\n💪 Benefits:\n• Controls blood sugar and BP\n• Improves heart health\n• Boosts energy and mood\n• Better sleep\n\n⚠️ Start slow if you haven't exercised in a while. Consult doctor before starting if you have heart or joint issues.`;
+    }
+
+    // Sleep
+    else if (lowerInput.includes('sleep') || lowerInput.includes('insomnia') || lowerInput.includes('neend') || lowerInput.includes('can\'t sleep')) {
+      response = `For better sleep:\n\n✅ Tips:\n• Sleep same time every night\n• Avoid phone/screen 1 hour before bed\n• Keep room dark and cool\n• No caffeine after 4pm\n• Light walk in evening\n• Warm milk or chamomile tea\n\n⚠️ See doctor if:\n• Can't sleep >3 weeks\n• Snoring loudly (sleep apnea)\n• Extreme daytime sleepiness`;
+    }
+
+    // Greeting
+    else if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('hey') || lowerInput.includes('salam') || lowerInput.includes('assalam')) {
+      response = `Hello! 👋 I'm HealthMate AI assistant.\n\nI can help you with:\n• 🩸 Blood Sugar & Diabetes\n• 💓 Blood Pressure\n• 🌡️ Fever & Temperature\n• 🤒 Headache & Migraine\n• 😴 Fatigue & Weakness\n• 😤 Cough & Cold\n• ❤️ Heart Symptoms\n• 🥗 Diet & Nutrition\n• 💪 Exercise Tips\n• 😴 Sleep Problems\n\nWhat can I help you with today?`;
+    }
+
+    // Default
+    else {
+      response = `I'm here to help with your health questions! 🏥\n\nYou can ask me about:\n• Blood sugar or BP readings\n• Fever and temperature\n• Headache or migraine\n• Fatigue or weakness\n• Cough, cold, sneezing\n• Heart symptoms\n• Diet and nutrition\n• Exercise tips\n• Sleep problems\n\nExample: "My sugar is 280, what should I do?" or "I have a headache, help me"`;
+    }
+
+    const aiMessage = {
+      text: response + "\n\n⚠️ AI-generated info only. Always consult a doctor for medical advice.",
+      sender: 'ai',
+      timestamp: new Date()
     };
-    
+
     setMessages(prev => [...prev, aiMessage]);
     setLoading(false);
   }, 1000);
