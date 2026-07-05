@@ -893,7 +893,7 @@ body.dark .modal-close:hover {
   .navbar {
     padding: 0.75rem 1rem;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
   }
 
   .nav-brand {
@@ -901,7 +901,17 @@ body.dark .modal-close:hover {
   }
 
   .nav-links {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    gap: 4px;
+    order: 3;
+  }
+
+  .nav-link {
+    padding: 5px 10px;
+    font-size: 0.78rem;
   }
 
   .user-menu {
@@ -921,7 +931,7 @@ body.dark .modal-close:hover {
   }
 
   .dashboard-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
   .stats-grid {
@@ -935,6 +945,12 @@ body.dark .modal-close:hover {
 
   .stat-number {
     font-size: 1.8rem;
+  }
+
+  /* Fix 2-column chart grid */
+  div[style*="gridTemplateColumns: '2fr 1fr'"],
+  div[style*='gridTemplateColumns: "2fr 1fr"'] {
+    grid-template-columns: 1fr !important;
   }
 
   .charts-grid {
@@ -970,7 +986,7 @@ body.dark .modal-close:hover {
 
   .report-actions {
     width: 100%;
-    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .reports-header {
@@ -991,11 +1007,11 @@ body.dark .modal-close:hover {
 
 @media (max-width: 480px) {
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .quick-actions {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .auth-container::before,
@@ -1003,6 +1019,7 @@ body.dark .modal-close:hover {
     display: none;
   }
 }
+
 
 /* ========== UTILITY ========== */
 .text-center { text-align: center; }
