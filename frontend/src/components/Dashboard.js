@@ -297,15 +297,15 @@ const Dashboard = () => {
             Premium
           </span>
         </Link>
-        <div className="nav-links">
-          <Link to="/dashboard" className="nav-link active">Dashboard</Link>
-          <Link to="/reports" className="nav-link">Reports</Link>
-          <Link to="/vitals" className="nav-link">Vitals</Link>
-          <Link to="/health-tips" className="nav-link">Health Tips</Link>
-          <Link to="/reminders" className="nav-link">Reminders</Link>
-           <Link to="/settings" className="nav-link">Settings</Link>
-           <Link to="/health-blog" className="nav-link">📚 Blog</Link> 
-        </div>
+     <div className="nav-links">
+  <Link to="/dashboard" className="nav-link active">Dashboard</Link>
+  <Link to="/reports" className="nav-link">Reports</Link>
+  <Link to="/vitals" className="nav-link">Vitals</Link>
+  <Link to="/health-tips" className="nav-link">Tips</Link>
+  <Link to="/reminders" className="nav-link">Reminders</Link>
+  <Link to="/settings" className="nav-link">Settings</Link>
+  <Link to="/health-blog" className="nav-link">Blog</Link>
+</div>
         <div className="user-menu">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '15px' }}>
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#2563eb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>
