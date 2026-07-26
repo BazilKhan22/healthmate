@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from './Navbar.js';
 
 const HealthTips = () => {
   const { user, logout } = useAuth();
@@ -161,29 +162,7 @@ const HealthTips = () => {
 
   return (
     <div>
-      <nav className="navbar">
-        <Link to="/dashboard" className="nav-brand">
-          🏥 <span style={{ fontWeight: 700 }}>HealthMate</span>
-        </Link>
-        <div className="nav-links">
-          <Link to="/dashboard" className="nav-link">Dashboard</Link>
-          <Link to="/reports" className="nav-link">Reports</Link>
-          <Link to="/vitals" className="nav-link">Vitals</Link>
-          <Link to="/health-tips" className="nav-link active">Health Tips</Link>
-          <Link to="/reminders" className="nav-link">Reminders</Link>
-        </div>
-        <div className="user-menu">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '15px' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#2563eb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
-            <span className="user-greeting">{user?.name}</span>
-          </div>
-          <button onClick={logout} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '14px' }}>
-            Logout
-          </button>
-        </div>
-      </nav>
+    <Navbar />
 
       <div className="reports-container">
         {/* Header */}

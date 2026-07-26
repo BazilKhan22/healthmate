@@ -9,7 +9,6 @@ import Vitals from './components/Vitals.js';
 import HealthTips from './components/HealthTips.js';
 import Reminders from './components/Reminders.js';
 import ProgressReport from './components/ProgressReport.js';
-import ReportComparison from './components/ReportComparison.js';
 import Settings from './components/Settings.js';
 import HealthBlog from './components/HealthBlog.js'; 
 import ReportDetail from './components/ReportDetail.js';
@@ -49,7 +48,6 @@ function App() {
             <Route path="/health-tips" element={<ProtectedRoute><HealthTips /></ProtectedRoute>} />
             <Route path="/reminders" element={<ProtectedRoute><Reminders /></ProtectedRoute>} />
             <Route path="/progress-report" element={<ProtectedRoute><ProgressReport /></ProtectedRoute>} />
-            <Route path="/report-comparison" element={<ProtectedRoute><ReportComparison /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/health-blog" element={<ProtectedRoute><HealthBlog /></ProtectedRoute>} />
             

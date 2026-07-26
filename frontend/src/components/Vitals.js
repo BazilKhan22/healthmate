@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.js';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from './Navbar.js';
 import {
   LineChart, Line, Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell, RadarChart, Radar, PolarGrid,
@@ -277,29 +278,7 @@ const Vitals = () => {
 
   return (
     <div>
-      <nav className="navbar">
-        <Link to="/dashboard" className="nav-brand">
-          🏥 <span style={{ fontWeight: 700 }}>HealthMate</span>
-        </Link>
-        <div className="nav-links">
-          <Link to="/dashboard" className="nav-link">Dashboard</Link>
-          <Link to="/reports" className="nav-link">Reports</Link>
-          <Link to="/vitals" className="nav-link active">Vitals</Link>
-          <Link to="/health-tips" className="nav-link">Health Tips</Link>
-          <Link to="/reminders" className="nav-link">Reminders</Link>
-        </div>
-        <div className="user-menu">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '15px' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#2563eb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
-            <span className="user-greeting">{user?.name}</span>
-          </div>
-          <button onClick={logout} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '14px' }}>
-            Logout
-          </button>
-        </div>
-      </nav>
+    <Navbar />
 
       <div className="vitals-container">
         {/* Header */}

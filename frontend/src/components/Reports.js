@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext.js';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { sendReportEmail } from '../services/emailService.js';
+import Navbar from './Navbar.js';
 
 // Timeline Chart Component
 const TimelineChart = ({ data }) => {
@@ -371,29 +372,7 @@ const handleShare = async () => {
 
   return (
     <div>
-      <nav className="navbar">
-        <Link to="/dashboard" className="nav-brand">
-          🏥 <span style={{ fontWeight: 700 }}>HealthMate</span>
-        </Link>
-        <div className="nav-links">
-          <Link to="/dashboard" className="nav-link">Dashboard</Link>
-          <Link to="/reports" className="nav-link active">Reports</Link>
-          <Link to="/vitals" className="nav-link">Vitals</Link>
-          <Link to="/health-tips" className="nav-link">Health Tips</Link>
-          <Link to="/reminders" className="nav-link">Reminders</Link>
-        </div>
-        <div className="user-menu">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '15px' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#2563eb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '600' }}>
-              {user?.name?.charAt(0).toUpperCase()}
-            </div>
-            <span className="user-greeting">{user?.name}</span>
-          </div>
-          <button onClick={logout} className="btn btn-outline" style={{ padding: '8px 16px', fontSize: '14px' }}>
-            Logout
-          </button>
-        </div>
-      </nav>
+     <Navbar />
 
       <div className="reports-container">
         {/* Header with Stats */}
@@ -403,9 +382,6 @@ const handleShare = async () => {
             <p className="dashboard-subtitle">Manage and analyze your medical reports with AI insights</p>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={compareReports} className="btn btn-outline">
-              📊 Compare Reports
-            </button>
             <button onClick={() => setShowAddModal(true)} className="btn btn-primary">
               📄 Add New Report
             </button>
